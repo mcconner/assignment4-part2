@@ -20,6 +20,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		$videoCategory = $_POST['category'];
 		if(isset($_POST['length']))
 		$videoLength = $_POST['length'];
+	
+		if(!$videoName){
+			$errorMsg = "Please enter a video name";
+		}else if(!is_int($videoLength)){
+			$errorMsg = "Your video length is not valid.";
+		}
+		
+		if(isset($errorMsg))
+			echo $errorMsg;
 		
 		//preparation statement to insert data into Videos table
 		$stmt = $mysqli->prepare("INSERT INTO Videos (name, category, length) VALUES (?, ?, ?)");
