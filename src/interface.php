@@ -11,6 +11,7 @@ if($mysqli->connect_errno){
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
+	//user clicked button to add a video
 	if(isset($_POST['addVideo'])){
 		//check if user entered data for video name, category, and length
 		if(isset($_POST['name']))
@@ -20,41 +21,44 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		if(isset($_POST['length']))
 		$videoLength = $_POST['length'];
 		
+		//preparation statement to insert data into Videos table
 		$stmt = $mysqli->prepare("INSERT INTO Videos (name, category, length) VALUES (?, ?, ?)");
 		$stmt->bind_param("ssi", $videoName, $videoCategory, $videoLength);
 		$stmt->execute();
 		$stmt->close();
 
 	}
+	//user clicked button to delete all videos
 	else if(isset($_POST['deleteAll'])){
 		$deleteAllData = $mysqli->prepare("DELETE FROM Videos");
 		$deleteAllData->execute();
 		$deleteAllData->close();
 	}
+	//user clicked button to delete a specific video
 	else if(isset($_POST['deleteVideo'])){
 		$deleteId = $_POST['deleteVideo'];
-
 		$deleteRow = $mysqli->prepare("DELETE FROM Videos WHERE id = ?");
 		$deleteRow->bind_param("i", $deleteId);
 		$deleteRow->execute();
 		$deleteRow->close();
 	}
+	//user clicked button to check-out video that is available
 	else if(isset($_POST['Check-Out'])){
 		$updateRentId = $_POST['Check-Out'];
-
 		$updateRow = $mysqli->prepare("UPDATE Videos SET rented='1' WHERE id = ?");
 		$updateRow->bind_param("i", $updateRentId);
 		$updateRow->execute();
 		$updateRow->close();
 	}
+	//user clicked button to check-in a video that is currently checked out 
 	else if(isset($_POST['Check-In'])){
 		$updateRentId = $_POST['Check-In'];
-		
 		$updateRow = $mysqli->prepare("UPDATE Videos SET rented='0' WHERE id = ?");
 		$updateRow->bind_param("i", $updateRentId);
 		$updateRow->execute();
 		$updateRow->close();
 	}
+	//something unexpected happened 
 	else{
 		echo "Not an expected button!";
 	}
@@ -69,11 +73,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 <body>
 <div>
 	<form method="POST" action="interface.php">
-	<h3>Add Movie</h3>
+	<h3>Add Video</h3>
 		<fieldset>
 		<p>Name:<input type="text" name="name" required></p>
 		<p>Category: <input type="text" name="category"></p>
-		<p>Length: <input type="number" name="length"></p>
+		<p>Length: <input type="number" min="0" name="length"></p>
 		</fieldset>
 		<p><input type="submit" name="addVideo" value="Add Video"></p>
 	</form>
@@ -94,7 +98,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		</tr>
 		
 		<?php 
-		
 		$cArr = array();
 		
 		$ddFilter = $mysqli->prepare("SELECT DISTINCT category FROM Videos WHERE category IS NOT NULL AND category <> '' ORDER BY category ");
@@ -118,7 +121,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		
 		<?php 
 		
-		//FILTER RESULTS
+		//filter results 
 		$filterBy = 'All';
 		if(isset($_GET['filterCategory']))
 			$filterBy = $_GET['filterCategory'];
@@ -128,6 +131,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 			$displayAll = $mysqli->prepare("SELECT * FROM Videos");
 			$displayAll->execute();
 		}else{
+		//user selected a filter 
 		$displayAll = $mysqli->prepare("SELECT * FROM Videos WHERE category = ?");
 		$displayAll->bind_param("s", $filterBy);
 		$displayAll->execute();
