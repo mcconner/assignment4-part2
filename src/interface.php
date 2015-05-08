@@ -32,7 +32,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		$deleteAllData->close();
 	}
 	else if(isset($_POST['deleteVideo'])){
-		echo "videoID = " . $_POST['deleteVideo'];
 		$deleteId = $_POST['deleteVideo'];
 
 		$deleteRow = $mysqli->prepare("DELETE FROM Videos WHERE id = ?");
@@ -40,11 +39,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		$deleteRow->execute();
 		$deleteRow->close();
 	}
-	else if(isset($_POST['checkinout'])){
-		echo "videoID = " . $_POST['checkinout'];
-		$updateRentId = $_POST['checkinout'];
-		
+	else if(isset($_POST['Check-Out'])){
+		$updateRentId = $_POST['Check-Out'];
+
 		$updateRow = $mysqli->prepare("UPDATE Videos SET rented='1' WHERE id = ?");
+		$updateRow->bind_param("i", $updateRentId);
+		$updateRow->execute();
+		$updateRow->close();
+	}
+	else if(isset($_POST['Check-In'])){
+		$updateRentId = $_POST['Check-In'];
+		
+		$updateRow = $mysqli->prepare("UPDATE Videos SET rented='0' WHERE id = ?");
 		$updateRow->bind_param("i", $updateRentId);
 		$updateRow->execute();
 		$updateRow->close();
@@ -65,9 +71,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	<form method="POST" action="interface.php">
 	<h3>Add Movie</h3>
 		<fieldset>
-		<p>Name:<input type="text" name="name"></p>
+		<p>Name:<input type="text" name="name" required></p>
 		<p>Category: <input type="text" name="category"></p>
-		<p>Length: <input type="text" name="length"></p>
+		<p>Length: <input type="number" name="length"></p>
 		</fieldset>
 		<p><input type="submit" name="addVideo" value="Add Video"></p>
 	</form>
@@ -113,19 +119,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		<?php 
 		
 		//FILTER RESULTS
-		//echo "filterCategory = " . $_GET['filterCategory'];
 		$filterBy = 'All';
 		if(isset($_GET['filterCategory']))
 			$filterBy = $_GET['filterCategory'];
-		echo "filterBy= [" . $filterBy . "]";
 
 		//display video table (ALL VIDEOS)
 		if($filterBy == 'All'){
-			echo "Show All Videos";
 			$displayAll = $mysqli->prepare("SELECT * FROM Videos");
 			$displayAll->execute();
 		}else{
-			echo "Filter";
 		$displayAll = $mysqli->prepare("SELECT * FROM Videos WHERE category = ?");
 		$displayAll->bind_param("s", $filterBy);
 		$displayAll->execute();
@@ -137,19 +139,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 			echo '<td>' . $vidName . '</td>';
 			echo '<td>' . $vidCat . '</td>';
 			echo '<td>' . $vidLength . '</td>';
-			if($vidRented === 0)
+			if($vidRented === 0){
 				$rentStatus = "Available";
-			else
+				$btnStatus = "Check-Out";
+			}
+			
+			if($vidRented === 1){
 				$rentStatus = "Checked Out";
+				$btnStatus = "Check-In";
+			}	
 			echo '<td>' . $rentStatus . '</td>';
 		?>
 		
 		<!--http://stackoverflow.com/questions/3317730/putting-a-php-variable-in-a-html-form-value-->
 		<td><form method="POST" action="interface.php"><button type="submit" value="<?php echo htmlspecialchars($vidId);?>" name="deleteVideo">Delete</button></form></td>
-		<td><form action="interface.php" method="POST"><button type="submit" value="<?php echo htmlspecialchars($vidId);?>" name="checkinout">Check In/Out</button></form></td>
+		<td><form action="interface.php" method="POST"><button type="submit" value="<?php echo htmlspecialchars($vidId);?>" name="<?php echo htmlspecialchars($btnStatus);?>"><?php echo $btnStatus; ?></button></form></td>
 			
 		<?php 
-			//echo '<td>' . "<input type='submit' value='Check In/Out'>" . '</td>';
 			echo '</tr>';
 		}
 		$displayAll->close();
