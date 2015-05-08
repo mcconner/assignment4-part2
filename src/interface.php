@@ -1,9 +1,9 @@
 <?php 
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-//include 'storedInfo.php;
+include 'secret.php';
 
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "mcconner-db", "P5lI87Z04uiRWTgl", "mcconner-db");
+$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "mcconner-db", $password, "mcconner-db");
 if($mysqli->connect_errno){
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 } else {
