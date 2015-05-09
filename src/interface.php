@@ -13,16 +13,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	if(isset($_POST['addVideo'])){
 		//check if user entered data for video name, category, and length
 		if(isset($_POST['name']))
-		$videoName = $_POST['name'];
+			$videoName = $_POST['name'];
 		if(isset($_POST['category']))
-		$videoCategory = $_POST['category'];
+			$videoCategory = $_POST['category'];
 		if(isset($_POST['length']))
-		$videoLength = $_POST['length'];
+			$videoLength = $_POST['length'];
 		
 		//validation for name and length 
 		if(!$videoName){
 			$errorMsg = "Please enter a video name";
-		}else if(!is_int($videoLength)){
+		}else if(($videoLength != '') && (!is_int($videoLength))){
 			$errorMsg = "Your video length is not valid.";
 		}
 		
