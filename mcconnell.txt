@@ -10,10 +10,14 @@ Start: Wed, 06 May 2015 16:00:00 -0700
 End: Wed, 06 May 2015 20:00:00 -0700
 Tasks: I was able to get the delete all button to work, and added filtering.
 
-Start: Thu, 30 Apr 2015 08:30:00 -0700
-End: Thu, 30 Apr 2015 10:30:00 -0700
+Start: Thu, 07 May 2015 08:30:00 -0700
+End: Thu, 07 May 2015 10:30:00 -0700
 Tasks: I worked on the filtering more, including getting rid of empty rows in the drop down menu. I also changed the way that I check which button is clicked, by moving it all to the top of my file and checking it before the data loads on the page.
 
-Start: Thu, 30 Apr 2015 18:00:00 -0700
-End: Thu, 30 Apr 2015 20:00:00 -0700
+Start: Thu, 07 May 2015 18:00:00 -0700
+End: Thu, 07 May 2015 20:00:00 -0700
 Tasks: I worked on making the delete and check in/out buttons functional, and added that the video name is a required field and the length must be a positive integer.
+
+Start: Fri, 08 May 2015 18:00:00 -0700
+End: Fri, 08 May 2015 20:00:00 -0700
+Tasks: I made final changes on the file including validating data in php and cleaning up my code.
