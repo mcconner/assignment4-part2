@@ -6,8 +6,6 @@ include 'secret.php';
 $mysqli = new mysqli("oniddb.cws.oregonstate.edu", "mcconner-db", $password, "mcconner-db");
 if($mysqli->connect_errno){
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
-} else {
-	echo "Connection worked!<br>";
 }
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
