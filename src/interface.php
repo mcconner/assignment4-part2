@@ -20,7 +20,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 		$videoCategory = $_POST['category'];
 		if(isset($_POST['length']))
 		$videoLength = $_POST['length'];
-	
+		
+		//validation for name and length 
 		if(!$videoName){
 			$errorMsg = "Please enter a video name";
 		}else if(!is_int($videoLength)){
